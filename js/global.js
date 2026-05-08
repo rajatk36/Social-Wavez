@@ -6,7 +6,26 @@ if (window.innerWidth > 480) {
   const cur = Object.assign(document.createElement("div"), { className: "cur" });
   const ring = Object.assign(document.createElement("div"), { className: "cur-ring" });
   document.body.append(cur, ring);
-  const navHoverSelector = "nav, nav *, #nav, #nav *, #navbar, #navbar *, .navbar, .navbar *";
+  const hideCursorSelector = [
+    "nav",
+    "nav *",
+    "#nav",
+    "#nav *",
+    "#navbar",
+    "#navbar *",
+    ".navbar",
+    ".navbar *",
+    "a",
+    "button",
+    ".btn",
+    "[role='button']",
+    "[onclick]",
+    "input",
+    "select",
+    "textarea",
+    "label",
+    "summary"
+  ].join(", ");
 
   let mx = 0;
   let my = 0;
@@ -18,9 +37,9 @@ if (window.innerWidth > 480) {
     my = e.clientY;
     cur.style.left = `${mx}px`;
     cur.style.top = `${my}px`;
-    const isNavHover = Boolean(e.target && e.target.closest(navHoverSelector));
-    cur.style.opacity = isNavHover ? "0" : "1";
-    ring.style.opacity = isNavHover ? "0" : "1";
+    const isInteractiveHover = Boolean(e.target && e.target.closest(hideCursorSelector));
+    cur.style.opacity = isInteractiveHover ? "0" : "1";
+    ring.style.opacity = isInteractiveHover ? "0" : "1";
   });
 
   const animateRing = () => {
