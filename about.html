@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us — Social Wavez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/global.css">
+<style>
+
+.mv-section {
+  padding: 80px 0 120px;
+}
+.mv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 64px;
+}
+.mv-card {
+  border-radius: 24px;
+  padding: 56px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.mv-card.mission {
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.05));
+  border: 1px solid rgba(99,102,241,0.25);
+}
+.mv-card.vision {
+  background: linear-gradient(135deg, rgba(167,139,250,0.1), rgba(167,139,250,0.03));
+  border: 1px solid rgba(167,139,250,0.2);
+}
+.mv-card::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99,102,241,0.15), transparent 70%);
+}
+.mv-icon {
+  font-size: 48px;
+  margin-bottom: 28px;
+  display: block;
+}
+.mv-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.mv-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+
+.story-section {
+  padding: 120px 0;
+  position: relative;
+}
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.story-text p {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.story-text p:first-of-type {
+  font-size: 20px;
+  color: var(--white);
+  font-weight: 300;
+}
+.story-visual {
+  position: relative;
+}
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.timeline-item.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -36px; top: 6px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+.timeline-year {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.timeline-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.timeline-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+
+.values-section {
+  padding: 80px 0 120px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 64px;
+  background: var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.value-cell {
+  background: var(--surface);
+  padding: 32px 28px;
+  transition: background 0.3s;
+}
+.value-cell:hover {
+  background: rgba(99,102,241,0.08);
+}
+.value-emoji { font-size: 28px; margin-bottom: 16px; }
+.value-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.value-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+
+.team-section {
+  padding: 120px 0;
+}
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+.team-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.4s, border-color 0.4s;
+}
+.team-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(99,102,241,0.4);
+}
+.team-photo {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.team-photo.c1 { background: linear-gradient(135deg, #1a1a3e, #2d1b69); }
+.team-photo.c2 { background: linear-gradient(135deg, #0d1b2a, #1a3a5c); }
+.team-photo.c3 { background: linear-gradient(135deg, #1a2d1a, #2d5c2d); }
+.team-avatar-big {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Sora', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: white;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+.team-info {
+  padding: 28px;
+}
+.team-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.team-role {
+  font-size: 13px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.team-bio {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+
+.stats-band {
+  padding: 80px 0;
+  background: linear-gradient(135deg, rgba(99,102,241,0.08), rgba(167,139,250,0.04));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  text-align: center;
+}
+.stat-item .num {
+  font-family: 'Sora', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1;
+}
+.stat-item .num span { color: var(--accent); }
+.stat-item .lbl {
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 8px;
+}
+
+
+.platforms-section {
+  padding: 80px 0 120px;
+}
+.platforms-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.platforms-grid {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.platform-badge {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 32px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  color: var(--white);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+.platform-badge:hover {
+  border-color: var(--accent);
+  background: rgba(99,102,241,0.1);
+  transform: translateY(-4px);
+}
+
+@media (max-width: 768px) {
+  .mv-grid { grid-template-columns: 1fr; }
+  .story-grid { grid-template-columns: 1fr; }
+  .values-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+
+<nav class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark">SW</div>
+      <span>Social Wavez</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="https://wa.me/918933942662" target="_blank" class="btn btn-primary">Get a Quote</a>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> / <span>About Us</span></div>
+    <h1 data-scroll-reveal>We Are <span>Social Wavez</span></h1>
+    <p style="font-family:'Inter',sans-serif; font-size:20px; color:var(--muted); margin-top:24px; max-width:560px; margin-left:auto; margin-right:auto;" data-scroll-reveal data-delay="150">
+      A content marketing agency powering creators, businesses, and coaches with video, social, and strategy.
+    </p>
+  </div>
+</section>
+
+
+<section class="story-section">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-text" data-scroll-reveal>
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title" style="margin-bottom:32px;">Powering brands with video, social, and marketing</h2>
+        <p>Social Wavez is a leading digital solutions provider in India and the USA, built on the belief that every creator and business deserves world-class content support.</p>
+        <p>We understand that every creator and business is unique. Our strategies are personalized to meet your specific goals and challenges, ensuring maximum impact and sustainable growth — not vanity metrics.</p>
+        <p>From a team of passionate creators, editors, and strategists, we've grown into a full-service content agency with operations across two continents and a portfolio of 200+ satisfied clients.</p>
+        <div style="margin-top:40px; display:flex; gap:16px; flex-wrap:wrap;">
+          <a href="contact.html" class="btn btn-primary">Work With Us</a>
+          <a href="services.html" class="btn btn-outline">Our Services →</a>
+        </div>
+      </div>
+      <div class="story-visual" data-scroll-reveal data-delay="200">
+        <div class="timeline" id="timeline">
+          <div class="timeline-item" data-scroll-reveal>
+            <div class="timeline-year">2019</div>
+            <div class="timeline-title">Founded in New Delhi</div>
+            <p class="timeline-desc">Social Wavez launches as a freelance video editing collective, quickly building reputation on Fiverr and Freelancer.</p>
+          </div>
+          <div class="timeline-item" data-scroll-reveal data-delay="150">
+            <div class="timeline-year">2020</div>
+            <div class="timeline-title">YouTube Management Launch</div>
+            <p class="timeline-desc">Expanded into full YouTube channel management, helping creators scale from thousands to millions of views.</p>
+          </div>
+          <div class="timeline-item" data-scroll-reveal data-delay="300">
+            <div class="timeline-year">2022</div>
+            <div class="timeline-title">USA Market Entry</div>
+            <p class="timeline-desc">Scaled operations to serve US-based businesses and coaches, bridging the gap between Indian talent and global clients.</p>
+          </div>
+          <div class="timeline-item" data-scroll-reveal data-delay="450">
+            <div class="timeline-year">2024</div>
+            <div class="timeline-title">25+ Expert Team</div>
+            <p class="timeline-desc">Grew to a dedicated team of 25+ editors, managers, and strategists. Crossed 999+ videos edited and 200+ 5-star reviews.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="stats-band">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat-item" data-scroll-reveal>
+        <div class="num"><span class="counter" data-target="190">0</span><span>+</span></div>
+        <div class="lbl">Projects Delivered</div>
+      </div>
+      <div class="stat-item" data-scroll-reveal data-delay="100">
+        <div class="num"><span class="counter" data-target="25">0</span><span>+</span></div>
+        <div class="lbl">Expert Team Members</div>
+      </div>
+      <div class="stat-item" data-scroll-reveal data-delay="200">
+        <div class="num"><span class="counter" data-target="96">0</span><span>%</span></div>
+        <div class="lbl">Job Success Rate</div>
+      </div>
+      <div class="stat-item" data-scroll-reveal data-delay="300">
+        <div class="num"><span class="counter" data-target="5">0</span><span>+</span></div>
+        <div class="lbl">Years of Experience</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<section class="mv-section">
+  <div class="container">
+    <div style="text-align:center; max-width:520px; margin:0 auto;" data-scroll-reveal>
+      <div class="section-label">What Drives Us</div>
+      <h2 class="section-title">Mission & Vision</h2>
+    </div>
+    <div class="mv-grid">
+      <div class="mv-card mission" data-scroll-reveal>
+        <span class="mv-icon">🚀</span>
+        <div class="mv-title">Our Mission</div>
+        <p class="mv-text">To empower creators, coaches, and businesses with premium content solutions that drive real, measurable growth — with personalized strategies that honor the uniqueness of every client we work with.</p>
+      </div>
+      <div class="mv-card vision" data-scroll-reveal data-delay="150">
+        <span class="mv-icon">🌊</span>
+        <div class="mv-title">Our Vision</div>
+        <p class="mv-text">To become the most trusted content marketing partner for digital-first entrepreneurs globally — building a world where every creator has access to agency-level production quality and strategic expertise.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="values-section">
+  <div class="container">
+    <div style="text-align:center; max-width:500px; margin:0 auto;" data-scroll-reveal>
+      <div class="section-label">What Drives Our Team</div>
+      <h2 class="section-title">Core Values</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-cell" data-scroll-reveal>
+        <div class="value-emoji">🎯</div>
+        <div class="value-name">Accountability</div>
+        <p class="value-desc">Owning our work in both individual and team capacities for optimal performance and client trust.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="80">
+        <div class="value-emoji">🏆</div>
+        <div class="value-name">Excellence</div>
+        <p class="value-desc">Continuous self-improvement for achieving excellence consistently across every deliverable.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="160">
+        <div class="value-emoji">💡</div>
+        <div class="value-name">Innovation</div>
+        <p class="value-desc">Encouraging creativity and new ideas to continuously improve and lead the industry forward.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="240">
+        <div class="value-emoji">🤝</div>
+        <div class="value-name">Teamwork</div>
+        <p class="value-desc">Promoting a culture of respect, collaboration, and mutual support for goal attainment.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="80">
+        <div class="value-emoji">✨</div>
+        <div class="value-name">Honesty & Trust</div>
+        <p class="value-desc">Practicing transparency and trustworthiness in all company and client interactions.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="160">
+        <div class="value-emoji">🧭</div>
+        <div class="value-name">Leadership</div>
+        <p class="value-desc">Achieving vision with the guidance of human collaborators and decisive thinking.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="240">
+        <div class="value-emoji">🔓</div>
+        <div class="value-name">Openness</div>
+        <p class="value-desc">Encouraging innovation through disciplined questioning, healthy disagreement, and fresh ideas.</p>
+      </div>
+      <div class="value-cell" data-scroll-reveal data-delay="320">
+        <div class="value-emoji">💬</div>
+        <div class="value-name">Communication</div>
+        <p class="value-desc">Fostering idea sharing, active listening, and embracing constructive feedback at every level.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="team-section">
+  <div class="container">
+    <div style="text-align:center; max-width:500px; margin:0 auto;" data-scroll-reveal>
+      <div class="section-label">Meet the Team</div>
+      <h2 class="section-title">The Creators Behind the <em style="font-style:normal;color:var(--accent)">Wave</em></h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card" data-scroll-reveal>
+        <div class="team-photo c1">
+          <div class="team-avatar-big">SR</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Siddhant Raj Sinha</div>
+          <div class="team-role">Founder & CEO</div>
+          <p class="team-bio">Visionary behind Social Wavez, Siddhant built the agency from freelance roots into a global operation. Strategist, creator, and growth expert.</p>
+        </div>
+      </div>
+      <div class="team-card" data-scroll-reveal data-delay="150">
+        <div class="team-photo c2">
+          <div class="team-avatar-big">DG</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">Dipesh Guragain</div>
+          <div class="team-role">Head of Development</div>
+          <p class="team-bio">The tech architect of Social Wavez. Dipesh leads web development and digital infrastructure, ensuring every pixel serves a purpose.</p>
+        </div>
+      </div>
+      <div class="team-card" data-scroll-reveal data-delay="300">
+        <div class="team-photo c3">
+          <div class="team-avatar-big">TL</div>
+        </div>
+        <div class="team-info">
+          <div class="team-name">The Creative Team</div>
+          <div class="team-role">25+ Editors & Strategists</div>
+          <p class="team-bio">Our diverse team of video editors, social media managers, and content strategists brings 999+ published videos to life every season.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="platforms-section">
+  <div class="container">
+    <div class="platforms-title" data-scroll-reveal>Top-Rated On</div>
+    <div class="platforms-grid" data-scroll-reveal>
+      <div class="platform-badge">⭐ Fiverr Pro</div>
+      <div class="platform-badge">✅ Upwork</div>
+      <div class="platform-badge">🏆 Freelancer</div>
+      <div class="platform-badge">📍 JustDial</div>
+      <div class="platform-badge">🔗 LinkedIn</div>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo" style="margin-bottom:16px;"><div class="logo-mark">SW</div><span>Social Wavez</span></a>
+      <p>Revolutionizing growth for creators and businesses through expert digital solutions.</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/social-wavez" target="_blank">in</a>
+        <a href="https://wa.me/918933942662" target="_blank">W</a>
+      </div>
+    </div>
+    <div class="footer-links"><h4>Company</h4><a href="about.html">About Us</a><a href="services.html">Services</a><a href="contact.html">Contact</a></div>
+    <div class="footer-links"><h4>Services</h4><a href="services.html">Video Editing</a><a href="services.html">YouTube Mgmt</a><a href="services.html">Social Media</a><a href="services.html">Animation</a></div>
+    <div class="footer-links"><h4>Contact</h4><a href="mailto:info@socialwavez.com">info@socialwavez.com</a><a href="mailto:hire@socialwavez.com">hire@socialwavez.com</a><a href="tel:+918933942662">+91 8933942662</a><span style="color:var(--muted);font-size:13px;">Rohini, New Delhi, 110085</span></div>
+  </div>
+  <div class="footer-bottom"><div class="container"><span>© 2025 Social Wavez. All Rights Reserved.</span><div style="display:flex;gap:24px;"><a href="#" style="color:var(--muted)">Privacy Policy</a><a href="#" style="color:var(--muted)">Terms</a></div></div></div>
+</footer>
+
+<script src="js/global.js"></script>
+</body>
+</html>
+
