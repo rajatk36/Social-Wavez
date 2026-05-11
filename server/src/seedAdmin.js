@@ -7,9 +7,9 @@ const seedAdmin = async () => {
   try {
     await connectDB();
 
-    const email = (process.env.ADMIN_EMAIL ).toLowerCase().trim();
-    const name = process.env.ADMIN_NAME ;
-    const password = process.env.ADMIN_PASSWORD ;
+    const email = (process.env.ADMIN_EMAIL || "admin@socialwavez.com").toLowerCase().trim();
+    const name = process.env.ADMIN_NAME || "Social Wavez Admin";
+    const password = process.env.ADMIN_PASSWORD || "Admin@123";
 
     const existing = await User.findOne({ email });
     if (existing) {

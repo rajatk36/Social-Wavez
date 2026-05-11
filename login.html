@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Social Wavez</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 20px 40px}
+    .auth-card{width:min(480px,100%);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:28px}
+    .auth-card h1{font-family:"Sora",sans-serif;margin-bottom:16px}
+    .field{margin-bottom:14px}
+    .field input{width:100%;padding:12px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);color:var(--white)}
+    .msg{margin-top:12px;font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo"><div class="logo-mark">SW</div><span>Social Wavez</span></a>
+      <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <section class="auth-wrap">
+    <form class="auth-card" id="loginForm">
+      <h1>Login</h1>
+      <div class="field"><input id="email" type="email" placeholder="Email" required /></div>
+      <div class="field"><input id="password" type="password" placeholder="Password" required /></div>
+      <button class="btn btn-primary" type="submit">Login</button>
+      <p class="msg" id="msg"></p>
+    </form>
+  </section>
+  <script src="js/api.js"></script>
+  <script src="js/global.js"></script>
+  <script>
+    const form = document.getElementById("loginForm");
+    const msg = document.getElementById("msg");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      msg.textContent = "";
+      try {
+        const data = await apiRequest("/api/auth/login", {
+          method: "POST",
+          body: JSON.stringify({
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value
+          })
+        });
+        localStorage.setItem("sw_token", data.token);
+        localStorage.setItem("sw_user", JSON.stringify(data.user));
+        window.location.href = "index.html";
+      } catch (error) {
+        msg.textContent = error.message || "Login failed";
+      }
+    });
+  </script>
+</body>
+</html>

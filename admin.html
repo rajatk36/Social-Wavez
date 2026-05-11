@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Social Wavez</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
+    .card h3{font-family:"Sora",sans-serif;margin-bottom:12px}
+    .row{font-size:13px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;margin-top:10px}
+    .row p{margin:4px 0;line-height:1.5}
+    .meta{font-size:12px;color:var(--muted)}
+    .inline-actions{display:flex;gap:8px;margin-top:8px}
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo"><div class="logo-mark">SW</div><span>Social Wavez</span></a>
+      <ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="contact.html">Contact</a></li></ul>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <main class="container" style="padding:130px 0 60px;">
+    <h1 class="section-title" style="font-size:42px">Admin Dashboard</h1>
+    <div id="adminGrid" class="grid" style="margin-top:20px"></div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/global.js"></script>
+  <script>
+    const grid = document.getElementById("adminGrid");
+    const formatDate = (value) => {
+      if (!value) return "-";
+      return new Date(value).toLocaleString();
+    };
+    const makeRows = (items, formatter) =>
+      items.length ? items.map((item) => `<div class="row">${formatter(item)}</div>`).join("") : '<div class="row">No data yet</div>';
+
+    Promise.all([
+      apiRequest("/api/admin/contacts"),
+      apiRequest("/api/admin/users"),
+      apiRequest("/api/admin/quotes"),
+      apiRequest("/api/admin/newsletters")
+    ]).then(([contactsData, usersData, quotesData, newslettersData]) => {
+      const contacts = contactsData.contacts || [];
+      const users = usersData.users || [];
+      const quotes = quotesData.quotes || [];
+      const newsletters = newslettersData.newsletters || [];
+
+      grid.innerHTML = `
+        <div class="card">
+          <h3>Contacts (${contacts.length})</h3>
+          ${makeRows(contacts, c => `
+            <p><strong>Name:</strong> ${c.name || "-"}</p>
+            <p><strong>Email:</strong> ${c.email || "-"}</p>
+            <p><strong>Phone:</strong> ${c.phone || "-"}</p>
+            <p><strong>Subject:</strong> ${c.subject || "-"}</p>
+            <p><strong>Message:</strong> ${c.message || "-"}</p>
+            <p class="meta"><strong>Created:</strong> ${formatDate(c.createdAt)}</p>
+            <div class="inline-actions">
+              <button data-del="${c._id}" class="btn btn-outline" style="padding:6px 10px">Delete</button>
+            </div>
+          `)}
+        </div>
+        <div class="card">
+          <h3>Users (${users.length})</h3>
+          ${makeRows(users, u => `
+            <p><strong>Name:</strong> ${u.name || "-"}</p>
+            <p><strong>Email:</strong> ${u.email || "-"}</p>
+            <p><strong>Role:</strong> ${u.role || "-"}</p>
+            <p class="meta"><strong>Created:</strong> ${formatDate(u.createdAt)}</p>
+          `)}
+        </div>
+        <div class="card">
+          <h3>Quotes (${quotes.length})</h3>
+          ${makeRows(quotes, q => `
+            <p><strong>Name:</strong> ${q.name || "-"}</p>
+            <p><strong>Email:</strong> ${q.email || "-"}</p>
+            <p><strong>Phone:</strong> ${q.phone || "-"}</p>
+            <p><strong>Service:</strong> ${q.serviceRequired || "-"}</p>
+            <p><strong>Budget:</strong> ${q.budget || "-"}</p>
+            <p><strong>Message:</strong> ${q.message || "-"}</p>
+            <p class="meta"><strong>Created:</strong> ${formatDate(q.createdAt)}</p>
+          `)}
+        </div>
+        <div class="card">
+          <h3>Newsletter (${newsletters.length})</h3>
+          ${makeRows(newsletters, n => `
+            <p><strong>Email:</strong> ${n.email || "-"}</p>
+            <p class="meta"><strong>Subscribed:</strong> ${formatDate(n.subscribedAt)}</p>
+          `)}
+        </div>
+      `;
+
+      document.querySelectorAll("[data-del]").forEach((button) => {
+        button.addEventListener("click", async () => {
+          const id = button.getAttribute("data-del");
+          await apiRequest(`/api/admin/contacts/${id}`, { method: "DELETE" });
+          window.location.reload();
+        });
+      });
+    }).catch((error) => {
+      grid.innerHTML = `<div class="card"><h3>Access Error</h3><div class="row">${error.message || "Admin access required"}</div></div>`;
+    });
+  </script>
+</body>
+</html>

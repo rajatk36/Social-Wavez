@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile - Social Wavez</title>
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    .profile-wrap {
+      padding: 130px 0 70px;
+    }
+    .profile-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .profile-sub {
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .admin-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff;
+      text-decoration: none;
+      font-family: "Sora", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      box-shadow: 0 10px 28px rgba(99, 102, 241, 0.35);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .admin-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 34px rgba(99, 102, 241, 0.45);
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .profile-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+    }
+    .profile-main {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: #fff;
+      font-family: "Sora", sans-serif;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .profile-name {
+      font-family: "Sora", sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .profile-role {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: var(--accent-light);
+      background: rgba(99, 102, 241, 0.12);
+    }
+    .meta-row {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .meta-row:first-of-type {
+      border-top: none;
+      padding-top: 2px;
+    }
+    .meta-key {
+      color: var(--muted);
+    }
+    .meta-value {
+      color: var(--white);
+      word-break: break-word;
+    }
+    .quick-actions h3 {
+      font-family: "Sora", sans-serif;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    .action-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .action-list a {
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: var(--muted);
+      transition: all 0.25s ease;
+    }
+    .action-list a:hover {
+      border-color: var(--accent);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    .security-form {
+      display: grid;
+      gap: 10px;
+    }
+    .security-form input {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.02);
+      color: var(--white);
+      outline: none;
+    }
+    .security-form input:focus {
+      border-color: var(--accent);
+    }
+    .security-msg {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .security-msg.error {
+      color: #ef4444;
+    }
+    .password-block {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .profile-status {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .profile-status.error {
+      color: #ef4444;
+    }
+    .hidden { display: none !important; }
+    @media (max-width: 860px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-logo"><div class="logo-mark">SW</div><span>Social Wavez</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <main class="container profile-wrap">
+    <div class="profile-head">
+      <div>
+        <h1 class="section-title" style="font-size:42px">My Profile</h1>
+        <p class="profile-sub">Manage your account details and security settings.</p>
+        <a href="admin.html" id="adminCta" class="admin-cta hidden">Open Admin Dashboard</a>
+      </div>
+      <a href="index.html" class="btn btn-outline">Back to Home</a>
+    </div>
+    <div class="profile-grid">
+      <section class="profile-card">
+        <div class="profile-main">
+          <div class="avatar" id="profileAvatar">SW</div>
+          <div>
+            <div class="profile-name" id="profileName">Loading...</div>
+            <span class="profile-role" id="profileRole">Account</span>
+          </div>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Email</span>
+          <span class="meta-value" id="profileEmail">-</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Role</span>
+          <span class="meta-value" id="profileRoleText">-</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Token</span>
+          <span class="meta-value">Active session</span>
+        </div>
+        <p class="profile-status" id="profileStatus">Fetching account details...</p>
+
+        <div class="password-block">
+          <h3 style="font-family:'Sora',sans-serif;font-size:18px;margin-bottom:12px;">Change Password</h3>
+          <form id="passwordForm" class="security-form">
+            <input id="currentPassword" type="password" placeholder="Current password" required />
+            <input id="newPassword" type="password" placeholder="New password (min 6 chars)" required />
+            <input id="confirmPassword" type="password" placeholder="Confirm new password" required />
+            <button class="btn btn-primary" type="submit">Update Password</button>
+          </form>
+          <p id="passwordMsg" class="security-msg"></p>
+        </div>
+      </section>
+      <aside class="profile-card quick-actions">
+        <h3>Quick Actions</h3>
+        <div id="userQuickActions" class="hidden">
+          <div class="action-list">
+            <a href="index.html">Request Quote</a>
+            <a href="services.html">Explore Services</a>
+            <a href="contact.html">Send Contact Request</a>
+            <a href="about.html">About Social Wavez</a>
+            <a href="index.html#services">Browse Homepage Services</a>
+          </div>
+        </div>
+        <p id="adminActionsNote" class="security-msg hidden">Quick actions are enabled for user accounts only.</p>
+        <div style="margin-top:12px">
+          <a href="#" id="logoutBtn" class="btn btn-outline">Logout</a>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/global.js"></script>
+  <script>
+    const token = localStorage.getItem("sw_token");
+    if (!token) window.location.href = "login.html";
+    const profileName = document.getElementById("profileName");
+    const profileRole = document.getElementById("profileRole");
+    const profileEmail = document.getElementById("profileEmail");
+    const profileRoleText = document.getElementById("profileRoleText");
+    const profileAvatar = document.getElementById("profileAvatar");
+    const profileStatus = document.getElementById("profileStatus");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const passwordForm = document.getElementById("passwordForm");
+    const passwordMsg = document.getElementById("passwordMsg");
+    const userQuickActions = document.getElementById("userQuickActions");
+    const adminActionsNote = document.getElementById("adminActionsNote");
+    const adminCta = document.getElementById("adminCta");
+
+    const logout = () => {
+      localStorage.removeItem("sw_token");
+      localStorage.removeItem("sw_user");
+      window.location.href = "login.html";
+    };
+
+    logoutBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      logout();
+    });
+
+    apiRequest("/api/auth/profile")
+      .then((data) => {
+        const user = data.user;
+        profileName.textContent = user.name;
+        profileRole.textContent = user.role;
+        profileEmail.textContent = user.email;
+        profileRoleText.textContent = user.role;
+        if (user.role === "user") {
+          userQuickActions.classList.remove("hidden");
+        } else {
+          adminCta.classList.remove("hidden");
+          adminActionsNote.classList.remove("hidden");
+        }
+        profileAvatar.textContent = user.name
+          .split(" ")
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((part) => part[0].toUpperCase())
+          .join("");
+        profileStatus.textContent = "Profile loaded successfully.";
+      })
+      .catch(() => {
+        profileStatus.classList.add("error");
+        profileStatus.textContent = "Session expired. Redirecting to login...";
+        setTimeout(logout, 900);
+      });
+
+    passwordForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      passwordMsg.classList.remove("error");
+      passwordMsg.textContent = "";
+
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (newPassword.length < 6) {
+        passwordMsg.classList.add("error");
+        passwordMsg.textContent = "New password must be at least 6 characters.";
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        passwordMsg.classList.add("error");
+        passwordMsg.textContent = "New password and confirm password do not match.";
+        return;
+      }
+
+      try {
+        const data = await apiRequest("/api/auth/change-password", {
+          method: "PUT",
+          body: JSON.stringify({ currentPassword, newPassword, confirmPassword })
+        });
+        passwordMsg.textContent = data.message || "Password updated successfully.";
+        passwordForm.reset();
+      } catch (error) {
+        passwordMsg.classList.add("error");
+        passwordMsg.textContent = error.message || "Failed to update password.";
+      }
+    });
+  </script>
+</body>
+</html>

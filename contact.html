@@ -474,6 +474,7 @@
   <div class="footer-bottom"><div class="container"><span>© 2025 Social Wavez. All Rights Reserved.</span><div style="display:flex;gap:24px;"><a href="#" style="color:var(--muted)">Privacy Policy</a><a href="#" style="color:var(--muted)">Terms</a></div></div></div>
 </footer>
 
+<script src="js/api.js"></script>
 <script src="js/global.js"></script>
 <script>
 
@@ -510,7 +511,7 @@ form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el =>
   });
 });
 
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = document.getElementById('name').value.trim();
   const email = document.getElementById('email').value.trim();
@@ -529,10 +530,18 @@ form.addEventListener('submit', (e) => {
 
 
   submitBtn.classList.add('loading');
-  setTimeout(() => {
+  try {
+    await apiRequest('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, phone, subject, message })
+    });
     formContent.style.display = 'none';
     successMsg.classList.add('visible');
-  }, 1800);
+  } catch (error) {
+    alert(error.message || 'Failed to submit form');
+  } finally {
+    submitBtn.classList.remove('loading');
+  }
 });
 </script>
 </body>

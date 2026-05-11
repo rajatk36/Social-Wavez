@@ -9,13 +9,13 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 
-const clientOrigin = process.env.CLIENT_ORIGIN ;
+const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5500";
 const allowAllOrigins = clientOrigin === "*" || !clientOrigin;
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      
+      // Allow requests from static file previews (origin can be null/undefined)
       if (!origin || origin === "null" || allowAllOrigins) {
         return callback(null, true);
       }

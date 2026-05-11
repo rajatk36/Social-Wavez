@@ -75,6 +75,81 @@ if (hamburger && navLinks) {
   });
 }
 
+const authToken = localStorage.getItem("sw_token");
+let authUser = null;
+try {
+  authUser = JSON.parse(localStorage.getItem("sw_user") || "null");
+} catch (error) {
+  authUser = null;
+}
+
+const buildAuthLinks = () => {
+  const navList = document.getElementById("navLinks") || document.getElementById("nl");
+  if (!navList) return;
+
+  const existingAuthNodes = navList.querySelectorAll(".auth-nav-item");
+  existingAuthNodes.forEach((node) => node.remove());
+
+  const user = authUser;
+  if (authToken && user) {
+    const profileItem = document.createElement("li");
+    profileItem.className = "auth-nav-item";
+    profileItem.innerHTML = `<a href="profile.html">${user.name}</a>`;
+    navList.appendChild(profileItem);
+
+  } else {
+    const loginItem = document.createElement("li");
+    loginItem.className = "auth-nav-item";
+    loginItem.innerHTML = `<a href="login.html">Login</a>`;
+    navList.appendChild(loginItem);
+
+    const registerItem = document.createElement("li");
+    registerItem.className = "auth-nav-item";
+    registerItem.innerHTML = `<a href="register.html">Register</a>`;
+    navList.appendChild(registerItem);
+  }
+};
+
+const injectNewsletterForm = () => {
+  const footerBrand = document.querySelector(".footer-brand") || document.querySelector(".fb");
+  if (!footerBrand || document.getElementById("newsletterForm")) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.style.marginTop = "16px";
+  wrapper.innerHTML = `
+    <form id="newsletterForm" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <input id="newsletterEmail" type="email" placeholder="Your email for updates" required
+        style="flex:1;min-width:190px;background:rgba(255,255,255,0.03);border:1px solid var(--border);color:var(--white);padding:10px 12px;border-radius:10px;" />
+      <button type="submit" class="btn btn-primary" style="padding:10px 14px;">Subscribe</button>
+    </form>
+    <p id="newsletterMessage" style="font-size:12px;color:var(--muted);margin-top:8px;"></p>
+  `;
+  footerBrand.appendChild(wrapper);
+
+  const form = document.getElementById("newsletterForm");
+  const emailInput = document.getElementById("newsletterEmail");
+  const message = document.getElementById("newsletterMessage");
+  if (!form || !emailInput || !message || typeof apiRequest !== "function") return;
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    message.textContent = "";
+    try {
+      const data = await apiRequest("/api/newsletter/subscribe", {
+        method: "POST",
+        body: JSON.stringify({ email: emailInput.value.trim() })
+      });
+      message.textContent = data.message || "Subscribed successfully";
+      emailInput.value = "";
+    } catch (error) {
+      message.textContent = error.message || "Subscription failed";
+    }
+  });
+};
+
+buildAuthLinks();
+injectNewsletterForm();
+
 const revealItems = document.querySelectorAll("[data-scroll-reveal]");
 
 if (revealItems.length) {

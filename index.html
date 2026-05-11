@@ -190,7 +190,7 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding-top:
       <li><a href="services.html">Services</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-    <a href="https://wa.me/918933942662?text=Hello!%20I'm%20interested%20in%20your%20services." target="_blank" class="btn bp" style="margin-left:auto">Get a Quote</a>
+    <button type="button" class="btn bp" id="quoteOpenBtn" style="margin-left:auto">Get a Free Quote</button>
     <button class="hbg" id="hbg" aria-label="Menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -369,6 +369,41 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding-top:
   <div class="fb2"><div class="ctr"><span>© 2025 Social Wavez. All Rights Reserved.</span><div style="display:flex;gap:20px"><a href="#" style="color:var(--muted)">Privacy</a><a href="#" style="color:var(--muted)">Terms</a></div></div></div>
 </footer>
 
+<div id="quoteModal" style="position:fixed;inset:0;background:rgba(9,9,15,.85);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px;">
+  <div style="width:min(560px,100%);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;position:relative;">
+    <button id="quoteCloseBtn" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--white);font-size:18px;cursor:pointer;">x</button>
+    <h3 style="font-family:'Sora',sans-serif;font-size:26px;margin-bottom:14px;">Get a Free Quote</h3>
+    <form id="quoteForm" style="display:grid;gap:10px;">
+      <input id="qName" type="text" placeholder="Name" required style="padding:12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--white);" />
+      <p id="qNameError" style="display:none;margin:-4px 0 0;color:#ef4444;font-size:12px;">Please enter your name (minimum 2 characters).</p>
+      <input id="qEmail" type="email" placeholder="Email" required style="padding:12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--white);" />
+      <p id="qEmailError" style="display:none;margin:-4px 0 0;color:#ef4444;font-size:12px;">Please enter a valid email address.</p>
+      <input id="qPhone" type="text" placeholder="Phone" required style="padding:12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--white);" />
+      <p id="qPhoneError" style="display:none;margin:-4px 0 0;color:#ef4444;font-size:12px;">Please enter a valid phone number.</p>
+      <div id="qServiceField" style="position:relative;">
+        <button type="button" id="qServiceButton" style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--white);text-align:left;cursor:pointer;">
+          Service Required
+        </button>
+        <div id="qServiceMenu" style="display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);background:#121225;border:1px solid var(--border);border-radius:10px;overflow:hidden;z-index:20;">
+          <button type="button" class="qServiceOption" data-value="Video Editing" style="width:100%;padding:10px 12px;background:transparent;border:none;color:var(--white);text-align:left;cursor:pointer;">Video Editing</button>
+          <button type="button" class="qServiceOption" data-value="YouTube Management" style="width:100%;padding:10px 12px;background:transparent;border:none;color:var(--white);text-align:left;cursor:pointer;">YouTube Management</button>
+          <button type="button" class="qServiceOption" data-value="Social Media Management" style="width:100%;padding:10px 12px;background:transparent;border:none;color:var(--white);text-align:left;cursor:pointer;">Social Media Management</button>
+          <button type="button" class="qServiceOption" data-value="2D & 3D Animation" style="width:100%;padding:10px 12px;background:transparent;border:none;color:var(--white);text-align:left;cursor:pointer;">2D & 3D Animation</button>
+        </div>
+        <input id="qService" type="hidden" value="" />
+      </div>
+      <p id="qServiceError" style="display:none;margin:-4px 0 0;color:#ef4444;font-size:12px;">Please select a service.</p>
+      <input id="qBudget" type="text" placeholder="Budget" required style="padding:12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--white);" />
+      <p id="qBudgetError" style="display:none;margin:-4px 0 0;color:#ef4444;font-size:12px;">Please enter your budget.</p>
+      <textarea id="qMessage" placeholder="Message" required style="padding:12px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.03);color:var(--white);min-height:100px;"></textarea>
+      <p id="qMessageError" style="display:none;margin:-4px 0 0;color:#ef4444;font-size:12px;">Message must be at least 10 characters.</p>
+      <button type="submit" class="btn bp">Submit Quote</button>
+      <p id="quoteMsg" style="font-size:13px;color:var(--muted);"></p>
+    </form>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
 <script src="js/global.js"></script>
 <script>
 
@@ -456,6 +491,135 @@ document.querySelectorAll('.bp,.bo').forEach(b=>{
   });
   b.addEventListener('mouseleave',()=>b.style.transform='');
 });
+
+const quoteModal = document.getElementById("quoteModal");
+const quoteOpenBtn = document.getElementById("quoteOpenBtn");
+const quoteCloseBtn = document.getElementById("quoteCloseBtn");
+const quoteForm = document.getElementById("quoteForm");
+const quoteMsg = document.getElementById("quoteMsg");
+const qServiceField = document.getElementById("qServiceField");
+const qServiceButton = document.getElementById("qServiceButton");
+const qServiceMenu = document.getElementById("qServiceMenu");
+const qServiceOptions = document.querySelectorAll(".qServiceOption");
+const quoteFields = {
+  qName: document.getElementById("qName"),
+  qEmail: document.getElementById("qEmail"),
+  qPhone: document.getElementById("qPhone"),
+  qService: document.getElementById("qService"),
+  qBudget: document.getElementById("qBudget"),
+  qMessage: document.getElementById("qMessage")
+};
+
+const quoteValidators = {
+  qName: (value) => value.length >= 2,
+  qEmail: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+  qPhone: (value) => /^[\+\d\s\-\(\)]{7,20}$/.test(value),
+  qService: (value) => value.trim().length > 0,
+  qBudget: (value) => value.trim().length > 0,
+  qMessage: (value) => value.trim().length >= 10
+};
+
+const setQuoteFieldError = (fieldId, showError) => {
+  const field = fieldId === "qService" ? qServiceButton : quoteFields[fieldId];
+  const errorEl = document.getElementById(`${fieldId}Error`);
+  if (!field || !errorEl) return;
+  field.style.borderColor = showError ? "#ef4444" : "var(--border)";
+  errorEl.style.display = showError ? "block" : "none";
+};
+
+if (quoteOpenBtn && quoteModal && quoteCloseBtn && quoteForm) {
+  quoteOpenBtn.addEventListener("click", () => { quoteModal.style.display = "flex"; });
+  quoteCloseBtn.addEventListener("click", () => { quoteModal.style.display = "none"; });
+  quoteModal.addEventListener("click", (e) => {
+    if (e.target === quoteModal) quoteModal.style.display = "none";
+  });
+
+  Object.entries(quoteFields).forEach(([fieldId, field]) => {
+    if (fieldId === "qService") return;
+    field.addEventListener("input", () => {
+      const value = field.value.trim();
+      const isValid = quoteValidators[fieldId](value);
+      setQuoteFieldError(fieldId, !isValid);
+    });
+  });
+
+  qServiceButton.addEventListener("click", () => {
+    qServiceMenu.style.display = qServiceMenu.style.display === "block" ? "none" : "block";
+  });
+
+  qServiceOptions.forEach((option) => {
+    option.addEventListener("click", () => {
+      quoteFields.qService.value = option.dataset.value || "";
+      qServiceButton.textContent = option.dataset.value || "Service Required";
+      qServiceMenu.style.display = "none";
+      setQuoteFieldError("qService", false);
+    });
+    option.addEventListener("mouseenter", () => {
+      option.style.background = "rgba(255,255,255,.08)";
+    });
+    option.addEventListener("mouseleave", () => {
+      option.style.background = "transparent";
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!qServiceField.contains(event.target)) {
+      qServiceMenu.style.display = "none";
+    }
+  });
+
+  quoteForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    quoteMsg.textContent = "";
+    const payload = {
+      name: quoteFields.qName.value.trim(),
+      email: quoteFields.qEmail.value.trim(),
+      phone: quoteFields.qPhone.value.trim(),
+      serviceRequired: quoteFields.qService.value,
+      budget: quoteFields.qBudget.value.trim(),
+      message: quoteFields.qMessage.value.trim()
+    };
+
+    const validationMap = {
+      qName: payload.name,
+      qEmail: payload.email,
+      qPhone: payload.phone,
+      qService: payload.serviceRequired,
+      qBudget: payload.budget,
+      qMessage: payload.message
+    };
+
+    let hasError = false;
+    Object.entries(validationMap).forEach(([fieldId, value]) => {
+      const isValid = quoteValidators[fieldId](value);
+      setQuoteFieldError(fieldId, !isValid);
+      if (!isValid) hasError = true;
+    });
+
+    if (hasError) {
+      quoteMsg.style.color = "#ef4444";
+      quoteMsg.textContent = "Please fix the highlighted fields.";
+      return;
+    }
+
+    try {
+      await apiRequest("/api/quote", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      quoteMsg.style.color = "var(--muted)";
+      quoteMsg.textContent = "Quote submitted successfully!";
+      quoteForm.reset();
+      quoteFields.qService.value = "";
+      qServiceButton.textContent = "Service Required";
+      qServiceMenu.style.display = "none";
+      Object.keys(quoteFields).forEach((fieldId) => setQuoteFieldError(fieldId, false));
+    } catch (error) {
+      quoteMsg.style.color = "#ef4444";
+      quoteMsg.textContent = error.message || "Failed to submit quote request";
+    }
+  });
+}
 </script>
 </body>
 </html>
