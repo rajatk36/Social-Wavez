@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/auth");
 const contactRoutes = require("./routes/contact");
@@ -9,13 +10,13 @@ const adminRoutes = require("./routes/admin");
 
 const app = express();
 
-const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5500";
+const clientOrigin = process.env.CLIENT_ORIGIN || "https://social-wavez.vercel.app";
 const allowAllOrigins = clientOrigin === "*" || !clientOrigin;
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests from static file previews (origin can be null/undefined)
+      
       if (!origin || origin === "null" || allowAllOrigins) {
         return callback(null, true);
       }
@@ -29,7 +30,13 @@ app.use(
 app.use(express.json());
 
 app.get("/api/health", (req, res) => {
-  res.json({ message: "Server is running" });
+  const dbConnected = mongoose.connection.readyState === 1;
+  res.status(dbConnected ? 200 : 503).json({
+    status: dbConnected ? "healthy" : "unhealthy",
+    message: dbConnected ? "Server and database are running" : "Database connection failed",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
 app.use("/api/auth", authRoutes);
