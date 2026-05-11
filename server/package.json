@@ -9,6 +9,9 @@
     "build": "echo 'No build required'",
     "seed:admin": "node src/seedAdmin.js"
   },
+  "engines": {
+    "node": "24.14.1"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
